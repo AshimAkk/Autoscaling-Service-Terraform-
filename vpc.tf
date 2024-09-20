@@ -64,3 +64,27 @@ resource "aws_route_table" "public-Routetable" {
     Name = "public-routetable"
   }
 }
+
+
+# Create Route table Association with PublicSubnet1 
+
+resource "aws_route_table_association" "PublicSubnet1-route-association" {
+  subnet_id      = aws_subnet.PublicSubnet1.id
+  route_table_id = aws_route_table.public-Routetable.id
+}
+
+
+# Create Route table Association with PublicSubnet2 
+
+resource "aws_route_table_association" "PublicSubnet2-route-association" {
+  subnet_id      = aws_subnet.PublicSubnet2.id
+  route_table_id = aws_route_table.public-Routetable.id
+}
+
+# Create Route table Association with PublicSubnet3
+
+resource "aws_route_table_association" "PublicSubnet3-route-association" {
+  subnet_id      = aws_subnet.PublicSubnet3.id
+  route_table_id = aws_route_table.public-Routetable.id
+
+}

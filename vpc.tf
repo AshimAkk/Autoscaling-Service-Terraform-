@@ -49,3 +49,18 @@ resource "aws_internet_gateway" "internet-gw" {
     Name = "my-internet-gateway"
   }
 }
+
+
+# Create Public Route Table
+# "0.0.0.0/0" is for all routes
+resource "aws_route_table" "public-Routetable" {
+  vpc_id = aws_vpc.webservice-vpc.id
+
+  route {
+    gateway_id = aws_internet_gateway.internet-gw.id
+    cidr_block = "0.0.0.0/0"
+  }
+  tags = {
+    Name = "public-routetable"
+  }
+}

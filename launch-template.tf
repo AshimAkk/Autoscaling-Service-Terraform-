@@ -1,8 +1,8 @@
 # Apache server security group 
 
-resource "aws_security_group" "ec2" {
-  name        = "apache-ec2-sg"
-  description = "apache-ec2-sg"
+resource "aws_security_group" "ec2-sg" {
+  name        = "ec2-sg"
+  description = "ec2-sg"
   vpc_id      = aws_vpc.webservice-vpc.id
 
   ingress {
@@ -25,4 +25,26 @@ resource "aws_security_group" "ec2" {
     Name = "ec2 security group"
   }
 
+}
+
+
+# stores all the EC2 configurations we desire 
+# referencing bash script to install apache 
+# 'tag specification' attach tags to newly created resources 
+#
+
+resource "aws_launch_template" "apache-lt" {
+  name                   = "apache-lt"
+  description            = "my apache launch template"
+  image_id               = var.ami
+  instance_type          = "t2.micro"
+  vpc_security_group_ids = [aws_security_group.ec2-sg.id]
+  user_data              = filebase64("scripts/install-apache.sh")
+
+  tag_specifications {
+    resource_type = "instance"
+    tags = {
+      Name = "apache-lt-template"
+    }
+  }
 }

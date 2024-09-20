@@ -88,3 +88,42 @@ resource "aws_route_table_association" "PublicSubnet3-route-association" {
   route_table_id = aws_route_table.public-Routetable.id
 
 }
+
+
+
+
+# Create PrivateSubnet1
+
+resource "aws_subnet" "PrivateSubnet1" {
+  vpc_id            = aws_vpc.webservice-vpc.id
+  cidr_block        = "192.168.3.0/24"
+  availability_zone = "ap-southeast-2a"
+
+  tags = {
+    Name = "PrivateSubnet1"
+  }
+}
+
+# Create PrivateSubnet2
+
+resource "aws_subnet" "PrivateSubnet2" {
+  vpc_id            = aws_vpc.webservice-vpc.id
+  cidr_block        = "192.168.4.0/24"
+  availability_zone = "ap-southeast-2b"
+
+  tags = {
+    Name = "PrivateSubnet2"
+  }
+}
+
+# Create PrivateSubnet3
+
+resource "aws_subnet" "PrivateSubnet3" {
+  vpc_id            = aws_vpc.webservice-vpc.id
+  cidr_block        = "192.168.5.0/24"
+  availability_zone = "ap-southeast-2c"
+
+  tags = {
+    Name = "PrivateSubnet3"
+  }
+}

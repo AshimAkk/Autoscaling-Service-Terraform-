@@ -127,3 +127,47 @@ resource "aws_subnet" "PrivateSubnet3" {
     Name = "PrivateSubnet3"
   }
 }
+
+
+
+
+
+                                                                                                      # private config
+
+# Create private Route Table
+# "0.0.0.0/0" is for all routes
+resource "aws_route_table" "private-Routetable" {
+  vpc_id = aws_vpc.webservice-vpc.id
+
+  route {
+    gateway_id = aws_internet_gateway.internet-gw.id
+    cidr_block = "0.0.0.0/0"
+  }
+  tags = {
+    Name = "private-routetable"
+  }
+}
+
+
+# Create Route table Association with PrivateSubnet1 
+
+resource "aws_route_table_association" "PrivateSubnet1-route-association" {
+  subnet_id      = aws_subnet.PrivateSubnet1.id
+  route_table_id = aws_route_table.private-Routetable.id
+}
+
+
+# Create Route table Association with PrivateSubnet2
+
+resource "aws_route_table_association" "PrivateSubnet2-route-association" {
+  subnet_id      = aws_subnet.PrivateSubnet2.id
+  route_table_id = aws_route_table.private-Routetable.id
+}
+
+# Create Route table Association with PrivateSubnet3
+
+resource "aws_route_table_association" "PrivateSubnet3-route-association" {
+  subnet_id      = aws_subnet.PrivateSubnet3.id
+  route_table_id = aws_route_table.private-Routetable.id
+}
+

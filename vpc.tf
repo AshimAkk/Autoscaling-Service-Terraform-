@@ -51,6 +51,7 @@ resource "aws_internet_gateway" "internet-gw" {
 }
 
 
+
 # Create Public Route Table
 # "0.0.0.0/0" is for all routes
 resource "aws_route_table" "public-Routetable" {
@@ -130,8 +131,25 @@ resource "aws_subnet" "PrivateSubnet3" {
 
 
 
+# create Elastic IP 
+resource "aws_eip" "nat" {
+  domain = "vpc"
+
+  depends_on = [ aws_internet_gateway.internet-gw]
+  
+}
+
+resource "aws_nat_gateway" "nat-main" {
+  allocation_id = aws_eip.nat.id
+  subnet_id = aws_subnet.PrivateSubnet1.id
 
 
+  tags = {
+    Name = "Nat gateway" 
+  }
+  
+  depends_on = [ aws_internet_gateway.internet-gw ]
+}
 # private config
 
 # Create private Route Table
@@ -140,7 +158,8 @@ resource "aws_route_table" "private-Routetable" {
   vpc_id = aws_vpc.webservice-vpc.id
 
   route {
-    gateway_id = aws_internet_gateway.internet-gw.id
+    # gateway_id = aws_internet_gateway.internet-gw.id
+    nat_gateway_id = aws_nat_gateway.nat-main.id
     cidr_block = "0.0.0.0/0"
   }
   tags = {

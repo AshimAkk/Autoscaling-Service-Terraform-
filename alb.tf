@@ -29,6 +29,16 @@ resource "aws_security_group" "application-lb-sg" {
 }
 
 
+# Create Application Load Balancer
+# ALB created in subnet (PublicSubnet1,PublicSubnet2,publicsubnet3)
+
+resource "aws_lb" "application-load-balancer" {
+  load_balancer_type = "application"
+  name               = "my-alb"
+  security_groups    = [aws_security_group.application-lb-sg.id]
+  subnets            = [aws_subnet.PublicSubnet1.id, aws_subnet.PublicSubnet2.id, aws_subnet.PublicSubnet3.id]
+}
+
 
 # Create a target group where traffic from the ALB is recieved
 
@@ -43,17 +53,6 @@ resource "aws_lb_target_group" "alb-target-group" {
     path = "/"
     port = 80
   }
-}
-
-
-# Create Application Load Balancer
-# ALB created in subnet (PublicSubnet1,PublicSubnet2,publicsubnet3)
-
-resource "aws_lb" "application-load-balancer" {
-  load_balancer_type = "application"
-  name               = "my-alb"
-  security_groups    = [aws_security_group.application-lb-sg.id]
-  subnets            = [aws_subnet.PublicSubnet1.id, aws_subnet.PublicSubnet2.id, aws_subnet.PublicSubnet3.id]
 }
 
 # Create a Listener, directs traffic that comes in from the ALB alb-tg target group

@@ -132,7 +132,7 @@ resource "aws_subnet" "PrivateSubnet3" {
 
 
 
-                                                                                                      # private config
+# private config
 
 # Create private Route Table
 # "0.0.0.0/0" is for all routes

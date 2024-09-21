@@ -39,21 +39,21 @@ resource "aws_autoscaling_policy" "autoscaling-policy-up" {
 
 
 resource "aws_cloudwatch_metric_alarm" "cpu-scale-out-alarm" {
-  alarm_name                = "cpu-scale-out-alarm"
-  comparison_operator       = "GreaterThanOrEqualToThreshold"
-  evaluation_periods        = 2
-  metric_name               = "CPUUtilisation"
-  namespace                 = "AWS/EC2"
-  period                    = 120
-  statistic                 = "Average"
-  threshold                 = 60
-  alarm_description         = "This metric monitors ec2 cpu utilisation and is trigger when utilisation hits 60% or higher "
- 
- dimensions = {
-   AutoscalingGroupName = aws_autoscaling_group.asg.name
- }
+  alarm_name          = "cpu-scale-out-alarm"
+  comparison_operator = "GreaterThanOrEqualToThreshold"
+  evaluation_periods  = 2
+  metric_name         = "CPUUtilisation"
+  namespace           = "AWS/EC2"
+  period              = 120
+  statistic           = "Average"
+  threshold           = 60
+  alarm_description   = "This metric monitors ec2 cpu utilisation and is trigger when utilisation hits 60% or higher "
 
- alarm_actions =[ aws_autoscaling_policy.autoscaling-policy-up.arn]
+  dimensions = {
+    AutoscalingGroupName = aws_autoscaling_group.asg.name
+  }
+
+  alarm_actions = [aws_autoscaling_policy.autoscaling-policy-up.arn]
 }
 
 # Create autoscaling policies (scale in)
@@ -69,19 +69,19 @@ resource "aws_autoscaling_policy" "autoscaling-policy-down" {
 
 
 resource "aws_cloudwatch_metric_alarm" "cpu-scale-in-alarm" {
-  alarm_name                = "cpu-scale-in-alarm"
-  comparison_operator       = "LessThanOrEqualToThreshold"
-  evaluation_periods        = 2
-  metric_name               = "CPUUtilisation"
-  namespace                 = "AWS/EC2"
-  period                    = 120
-  statistic                 = "Average"
-  threshold                 = 10
-  alarm_description         = "This metric monitors ec2 cpu utilisation and is trigger when utilisation hits 10% or higher "
- 
- dimensions = {
-   AutoscalingGroupName = aws_autoscaling_group.asg.name
- }
+  alarm_name          = "cpu-scale-in-alarm"
+  comparison_operator = "LessThanOrEqualToThreshold"
+  evaluation_periods  = 2
+  metric_name         = "CPUUtilisation"
+  namespace           = "AWS/EC2"
+  period              = 120
+  statistic           = "Average"
+  threshold           = 10
+  alarm_description   = "This metric monitors ec2 cpu utilisation and is trigger when utilisation hits 10% or higher "
 
- alarm_actions =[ aws_autoscaling_policy.autoscaling-policy-down.arn]
+  dimensions = {
+    AutoscalingGroupName = aws_autoscaling_group.asg.name
+  }
+
+  alarm_actions = [aws_autoscaling_policy.autoscaling-policy-down.arn]
 }

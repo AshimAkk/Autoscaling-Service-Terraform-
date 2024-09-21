@@ -55,3 +55,33 @@ resource "aws_cloudwatch_metric_alarm" "cpu-scale-out-alarm" {
 
  alarm_actions =[ aws_autoscaling_policy.autoscaling-policy-up.arn]
 }
+
+# Create autoscaling policies (scale in)
+# -1 removes 1 instance 
+resource "aws_autoscaling_policy" "autoscaling-policy-down" {
+  name                   = "autoscaling-policy-down"
+  scaling_adjustment     = -1
+  adjustment_type        = "ChangeInCapacity"
+  cooldown               = 300
+  autoscaling_group_name = aws_autoscaling_group.asg.name
+
+}
+
+
+resource "aws_cloudwatch_metric_alarm" "cpu-scale-in-alarm" {
+  alarm_name                = "cpu-scale-in-alarm"
+  comparison_operator       = "LessThanOrEqualToThreshold"
+  evaluation_periods        = 2
+  metric_name               = "CPUUtilisation"
+  namespace                 = "AWS/EC2"
+  period                    = 120
+  statistic                 = "Average"
+  threshold                 = 10
+  alarm_description         = "This metric monitors ec2 cpu utilisation and is trigger when utilisation hits 10% or higher "
+ 
+ dimensions = {
+   AutoscalingGroupName = aws_autoscaling_group.asg.name
+ }
+
+ alarm_actions =[ aws_autoscaling_policy.autoscaling-policy-down.arn]
+}

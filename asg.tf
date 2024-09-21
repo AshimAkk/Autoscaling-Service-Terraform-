@@ -6,7 +6,7 @@
 
 resource "aws_autoscaling_group" "asg" {
   name                 = "apache-asg"
-  max_size             = 5
+  max_size             = 3
   min_size             = 2
   health_check_type    = "ELB"
   termination_policies = ["OldestInstance"]
@@ -19,4 +19,17 @@ resource "aws_autoscaling_group" "asg" {
 
   # new instances are attached to the target group when they are created
   target_group_arns = [aws_lb_target_group.alb-target-group.arn]
+}
+
+# Create autoscaling policies (scale out)
+# Cooldown insures that the instance is fully configured before attempting to launch any new instances or make adjustmests to the current configuration 
+
+resource "aws_autoscaling_policy" "autoscaling-policy-up" {
+  name                   = "autoscaling-policy-up"
+  scaling_adjustment     = 1
+  adjustment_type        = "ChangeInCapacity"
+  cooldown               = 300
+  autoscaling_group_name = aws_autoscaling_group.asg.name
+
+
 }
